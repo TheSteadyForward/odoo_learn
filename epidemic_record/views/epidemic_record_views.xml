@@ -36,6 +36,6 @@
     <menuitem name="疫情记录"
               id="sec_epidemic_record_menu"
               parent="epidemic_record.epidemic_record_menu_root"
-              groups="base.group_user"
+              action="epidemic_record_act_window"
               sequence="10"/>
 </odoo>

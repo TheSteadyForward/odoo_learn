@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <!-- tree视图(列表视图) -->
+    <record id="epidemic_record_tree_view" model="ir.ui.view">
+        <field name='name'>疫情记录</field>
+        <field name="model">epidemic.record</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="state"/>
+                <field name="city"/>
+                <field name="county"/>
+                <field name="street"/>
+                <field name="ill_type"/>
+                <field name="within_or_abroad"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- action操作视图 -->
+    <record id="epidemic_record_act_window" model="ir.actions.act_window">
+        <field name="name">疫情记录</field>
+        <field name="res_model">epidemic.record</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- 一级菜单 -->
+    <menuitem name="疫情记录"
+              id="epidemic_record_menu_root"
+              groups="base.group_user"
+              sequence="10"/>
+
+    <!-- 二级菜单 -->
+    <menuitem name="疫情记录"
+              id="sec_epidemic_record_menu"
+              parent="epidemic_record.epidemic_record_menu_root"
+              groups="base.group_user"
+              sequence="10"/>
+</odoo>

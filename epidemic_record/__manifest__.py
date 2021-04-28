@@ -24,5 +24,7 @@
         'security/ir.model.access.csv'
     ],
     'qweb': [],
+    # 'installable': True,
+    # 标志该模块为独立的模块
     'application': True
 }

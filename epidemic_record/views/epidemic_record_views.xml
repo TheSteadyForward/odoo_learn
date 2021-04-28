@@ -19,6 +19,64 @@
         </field>
     </record>
 
+    <!--  疫情记录form视图  -->
+    <record id="epidemic_record_from_view" model="ir.ui.view">
+        <field name="name">疫情记录详情</field>
+        <field name="model">epidemic.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" string="姓名" required="1"/>
+                            <field name="is_ill" string="是否确诊"/>
+                            <field name="within_or_abroad" string="境内/境外" required="1"/>
+                            <field name="begin_lsolation_date" string="起始隔离日期" attrs="{'required': [('is_ill', '=', False)], 'invisible': [('is_ill', '=', True)]}"/>
+                            <field name="lsolation_mode" string="隔离方式" attrs="{'required': [('is_ill', '=', False)], 'invisible': [('is_ill', '=', True)]}"/>
+                            <field name="ill_type" string="感染方式" attrs="{'required': [('is_ill', '=', True)] ,'invisible': [('is_ill', '=', False)]}"/>
+                            <field name="date" string="确诊日期" attrs="{'required': [('is_ill', '=', True)], 'invisible': [('is_ill', '=', False)]}"/>
+                        </group>
+
+                        <group>
+                            <field name="state" string="省份" required="1"/>
+                            <field name="city" string="市" required="1"/>
+                            <field name="county" string="县/区"/>
+                            <field name="street" string="详细地址" required="1"/>
+                            <field name="create_user_id" string="填报人" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="说明">
+                            <field name="note" placeholder="其他信息"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+
+    </record>
+
+    <!--  疫情记录筛选项  -->
+    <record id="epidemic_record_search_view" model="ir.ui.view">
+        <field name="name">疫情记录搜索项</field>
+        <field name="model">epidemic.record</field>
+        <field name="arch" type="xml">
+            <search>
+                <!-- 默认搜索项 -->
+                <field name="name" string="姓名"/>
+                <field name="state" string="省份"/>
+                <!-- 筛选项 -->
+                <filter string="已确诊" name="is_ill" domain="[('is_ill', '=', True)]"/>
+                <filter string="未确诊" name="is_ill" domain="[('is_ill', '=', False)]"/>
+                <!-- 分组 -->
+                <group expand="1">
+                    <filter string="是否确诊" name="is_ill" context="{'group_by': 'is_ill'}"/>
+                    <filter string="填报人" name="create_user_id" context="{'group_by': 'create_user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- action操作视图 -->
     <record id="epidemic_record_act_window" model="ir.actions.act_window">
         <field name="name">疫情记录</field>

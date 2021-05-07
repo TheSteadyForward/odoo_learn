@@ -25,6 +25,11 @@
         <field name="model">epidemic.record</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button string="测试按钮1" type='object' class="oe_highlight" name="my_unlink"/>
+                    <button string="搜索按钮" type="object" class="oe_highlight" name="my_search"/>
+                    <button string="创建或修改" type="object" class="oe_highlight" name="create_or_write"/>
+                </header>
                 <sheet>
                     <group>
                         <group>
@@ -43,6 +48,9 @@
                             <field name="county" string="县/区"/>
                             <field name="street" string="详细地址" required="1"/>
                             <field name="create_user_id" string="填报人" readonly="1"/>
+                            <field name="fuzhu_create_user_ids" widget="many2many_tags" options="{'no_create': True, 'no_edit': True}" string="辅助填报人"/>
+                            <field name="test_float" string="浮点数"/>
+                            <field name="test_int" string="整数"/>
                         </group>
                     </group>
                     <notebook>
@@ -56,7 +64,7 @@
 
     </record>
 
-    <!--  疫情记录筛选项  -->
+    <!--  疫情记录搜索视图  -->
     <record id="epidemic_record_search_view" model="ir.ui.view">
         <field name="name">疫情记录搜索项</field>
         <field name="model">epidemic.record</field>
@@ -77,11 +85,38 @@
         </field>
     </record>
 
+    <!-- 透视表-->
+    <record id="epidemic_record_pivot_view" model="ir.ui.view">
+        <field name="name">疫情记录透视表</field>
+        <field name="model">epidemic.record</field>
+        <field name="arch" type="xml">
+            <pivot disable_linking="True" default_order="test_float desc">
+                <field name="is_ill" type="row" string="是否确诊"/>
+                <field name="begin_lsolation_date" type="row" interval="day"/>
+                <field name="test_float" type="measure" string="测试浮点数"/>
+                <field name="test_int" type="measure" string="测试整型数"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- graph视图表 -->
+    <record id="epidemic_record_graph_view" model="ir.ui.view">
+        <field name="name">疫情记录图表视图</field>
+        <field name="model">epidemic.record</field>
+        <field name="arch" type="xml">
+            <graph type="pie">
+                <field name="state" type="row"/>
+                <field name="test_int" type="measure"/>
+            </graph>
+        </field>
+
+    </record>
+
     <!-- action操作视图 -->
     <record id="epidemic_record_act_window" model="ir.actions.act_window">
         <field name="name">疫情记录</field>
         <field name="res_model">epidemic.record</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
     </record>
 
     <!-- 一级菜单 -->

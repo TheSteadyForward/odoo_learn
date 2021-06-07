@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+    <!-- tree 视图-->
     <record id="epidemic_record_tree_view" model="ir.ui.view">
         <field name="name">疫情记录</field>
         <field name="model">epidemic.record</field>
@@ -17,21 +18,87 @@
         </field>
     </record>
 
+    <!--  form视图  -->
+    <record id="epidemic_record_from_views" model="ir.ui.view">
+        <field name="name">疫情记录from表单</field>
+        <field name="model">epidemic.record</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <!-- required等于1时，字段为必填字段，为0时字段为非必填，字段默认等于0 -->
+                            <!-- invisible等于 1 时，字段隐藏，等于0时字段显示，该属性默认等于 0 -->
+                            <!-- attrs值为一个字典，对其他属性进行判断 -->
+                            <!-- readonly等于1时，该字段表示为只能读取，不能设置；等于0时该字段可以进行修改 -->
+                            <!-- 文本输入框 -->
+                            <field name="name" string="姓名" required="1"/>
+                            <field name="is_ill" string="是否确诊"/>
+                            <field name="within_or_abroad" string="境内/境外" required="1"/>
+                            <field name="begin_isolation_date" string="起始隔离日期" attrs="{'required':[('is_ill', '=', False)], 'invisible': [('is_ill', '=', True)]}"/>
+                            <field name="isolation_mode" string="隔离方式" attrs="{'required':[('is_ill', '=', False)], 'invisible': [('is_ill', '=', True)]}"/>
+                            <field name="ill_type" string="感染方式" attrs="{'required': [('is_ill', '=', True)], 'invisible': [('is_ill', '=', False)]}"/>
+                            <field name="data" string="确诊日期" attrs="{'required': [('is_ill', '=', True)], 'invisible': [('is_ill', '=', False)]}"/>
+                        </group>
+                        <group>
+                            <field name="state" string="省份" required="1"/>
+                            <field name="city" string="市区" required="1"/>
+                            <field name="county" string="区/县"/>
+                            <field name="street" string="具体地址" required="1"/>
+                            <field name="create_user_id" string="提报人" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                            <page string="说明">
+                                <field name="note" placeholder="其他信息"/>
+                            </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--  搜索视图  -->
+    <record id="epidemic_record_search_views" model="ir.ui.view">
+        <field name="name">疫情记录搜索视图</field>
+        <field name="model">epidemic.record</field>
+        <field name="arch" type="xml">
+            <search>
+                <!--  搜索视图  -->
+                <field name="name"/>
+                <field name="state"/>
+                <!--  筛选项  -->
+                <filter string="已确诊" name="is_ill" domain="[('is_ill', '=', True)]"/>
+                <filter string="未确诊" name="is_ill" domain="[('is_ill', '=', False)]"/>
+
+                <!--   分组筛选  -->
+                <group expand="1">
+                    <filter string="是否确诊" name="is_ill" context="{'group_by': 'is_ill'}"/>
+                    <filter string="省份" name="state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+
+    </record>
+
+    <!--  视图动作  -->
     <record id="epidemic_record_act_window" model="ir.actions.act_window">
         <field name="name">疫情记录</field>
         <field name="res_model">epidemic.record</field>
         <field name="view_mode">tree,form</field>
     </record>
 
+    <!-- 一级菜单 -->
     <menuitem name="疫情记录"
               id="epidemic_record_menu_root"
               groups="base.group_user"
               sequence="10"/>
 
-    <menuitem name="疫情记录"
+    <!-- 二级菜单 -->
+    <menuitem name="疫情记录列表页"
               id="sec_epidemic_record_menu"
               parent="epidemic_record_menu_root"
               action="epidemic_record_act_window"
               sequence="10"/>
-    
+
 </odoo>

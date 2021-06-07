@@ -15,6 +15,7 @@
     ],
     "qweb": [],
 
+    # 独立模块的开发，不是为其他模块作为扩展
     "application": True,
     "depends": [],
     "installable": True
